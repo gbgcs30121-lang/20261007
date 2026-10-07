@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOI - 내 체형에 맞는 쇼핑</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef0f7;--card:#fff;--ink:#1b1f3b;--sub:#6b7090;--line:#dfe2ee;--pri:#5b4bff;--pri-ink:#fff;--mint:#b8f2d8;--mint-ink:#0d4a33;--chip:#e2e5f5;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12142a;--card:#1c2040;--ink:#eef0ff;--sub:#9aa0c8;--line:#2d3260;--pri:#8a7dff;--pri-ink:#12142a;--mint:#1f5c47;--mint-ink:#c9fbe6;--chip:#2a2f5c}}
+:root[data-theme="dark"]{--bg:#12142a;--card:#1c2040;--ink:#eef0ff;--sub:#9aa0c8;--line:#2d3260;--pri:#8a7dff;--pri-ink:#12142a;--mint:#1f5c47;--mint-ink:#c9fbe6;--chip:#2a2f5c}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;font-size:14px}
+#app{max-width:480px;height:100%;margin:0 auto;display:flex;flex-direction:column;background:var(--bg);position:relative}
+header{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 6px}
+.logo{font-weight:900;font-size:26px;letter-spacing:-1px}.logo i{color:var(--pri);font-style:normal}
+.pt{background:var(--mint);color:var(--mint-ink);border-radius:20px;padding:5px 12px;font-weight:700;font-size:12px}
+main{flex:1;overflow-y:auto;padding:6px 16px 20px}
+nav{display:flex;background:var(--card);border-top:1px solid var(--line)}
+nav button{flex:1;border:0;background:none;padding:9px 0 10px;color:var(--sub);font:inherit;font-size:11px;font-weight:500;cursor:pointer;position:relative}
+nav button b{display:block;font-size:19px;line-height:1.2}
+nav button.on{color:var(--pri);font-weight:700}
+.badge{position:absolute;top:4px;left:56%;background:var(--pri);color:var(--pri-ink);border-radius:9px;font-size:10px;min-width:16px;padding:1px 4px}
+h2{font-size:18px;margin:18px 0 4px;letter-spacing:-.5px}h3{font-size:15px;margin:0}
+.sub{color:var(--sub);font-size:12px;margin:0 0 10px}
+.card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:12px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:0;background:var(--chip);color:var(--ink);padding:6px 12px;border-radius:16px;font:inherit;font-size:12px;cursor:pointer}
+.chip.on{background:var(--pri);color:var(--pri-ink);font-weight:700}
+.btn{border:0;background:var(--pri);color:var(--pri-ink);padding:12px 16px;border-radius:14px;font:inherit;font-weight:700;cursor:pointer;width:100%}
+.btn.ghost{background:var(--chip);color:var(--ink)}
+.btn.sm{width:auto;padding:7px 12px;font-size:12px;border-radius:12px}
+.hero{background:var(--pri);color:var(--pri-ink);border-radius:22px;padding:20px;margin-top:6px}
+.hero h1{margin:0 0 6px;font-size:23px;line-height:1.3;letter-spacing:-.8px}.hero p{margin:0 0 14px;opacity:.85;font-size:13px}
+.hero .btn{background:var(--card);color:var(--ink);width:auto}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.p{background:var(--card);border-radius:16px;overflow:hidden}
+.ph{height:130px;display:flex;align-items:flex-end;justify-content:flex-end;padding:8px;position:relative}
+.ph svg{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.heart{position:relative;z-index:1;border:0;background:rgba(255,255,255,.85);border-radius:50%;width:30px;height:30px;font-size:15px;cursor:pointer;color:#555}
+.heart.on{color:#ee3f6c}
+.pi{padding:10px}.pi small{color:var(--sub)}.pi .n{font-weight:500;margin:1px 0 4px}.pi b{font-size:15px}
+.tag{font-size:10px;color:var(--pri);margin-top:3px}
+.stage{background:linear-gradient(180deg,var(--chip),var(--card));border-radius:20px;position:relative;overflow:hidden;height:340px;display:flex;justify-content:center}
+.scan{position:absolute;left:0;right:0;height:3px;background:var(--pri);box-shadow:0 0 18px 6px var(--pri);top:0;display:none}
+.scanning .scan{display:block;animation:sc 1.6s ease-in-out 1}
+@keyframes sc{0%{top:0}50%{top:100%}100%{top:0}}
+@media (prefers-reduced-motion:reduce){.scanning .scan{animation:none}}
+.rg{display:grid;grid-template-columns:44px 1fr 52px;align-items:center;gap:8px;margin:8px 0;font-size:12px}
+input[type=range]{width:100%;accent-color:var(--pri)}
+.lb{background:var(--card);border-radius:18px;margin-bottom:12px;overflow:hidden}
+.lbh{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.av{width:34px;height:34px;border-radius:50%;background:var(--chip);display:flex;align-items:center;justify-content:center;font-weight:700}
+.lbs{height:190px;display:flex;justify-content:center;background:var(--chip)}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}.row .sw{width:44px;height:44px;border-radius:12px;flex:none}
+.row .g{flex:1}.row .g small{color:var(--sub)}
+.sum{display:flex;justify-content:space-between;padding:4px 0}
+.toast{position:absolute;left:50%;bottom:84px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .2s;white-space:nowrap;z-index:9}
+.toast.on{opacity:1}
+.empty{text-align:center;color:var(--sub);padding:30px 0}
+button:focus-visible,input:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app">
+  <header><div class="logo">MO<i>I</i></div><div class="pt" id="pt"></div></header>
+  <main id="main"></main>
+  <nav id="nav"></nav>
+  <div class="toast" id="toast"></div>
+</div>
+<script>
+var P=[
+{id:1,n:"오버핏 코튼 셔츠",b:"MOI Lab",pr:39000,c:"top",col:"#a9c4ff",t:["미니멀","오버핏"]},
+{id:2,n:"크롭 스웻 집업",b:"Dayline",pr:45000,c:"top",col:"#ffb3c7",t:["스트릿","크롭"]},
+{id:3,n:"스트라이프 니트",b:"Nord",pr:52000,c:"top",col:"#ffd98e",t:["캐주얼","니트"]},
+{id:4,n:"와이드 데님 팬츠",b:"Blueroom",pr:59000,c:"bottom",col:"#4a66b0",t:["스트릿","와이드"]},
+{id:5,n:"슬랙스 스트레이트",b:"MOI Lab",pr:48000,c:"bottom",col:"#3a3d52",t:["미니멀","슬랙스"]},
+{id:6,n:"플리츠 미니 스커트",b:"Dayline",pr:42000,c:"bottom",col:"#c9b6ff",t:["캐주얼","걸리시"]},
+{id:7,n:"라이트 바람막이",b:"Nord",pr:68000,c:"outer",col:"#9be3c4",t:["스트릿","아웃도어"]},
+{id:8,n:"울 블렌드 코트",b:"Blueroom",pr:129000,c:"outer",col:"#d8c3a5",t:["미니멀","클래식"]}];
+var LB=[
+{u:"서연",h:163,w:50,s:36,tx:"데일리 캠퍼스룩",it:[1,5,7]},
+{u:"지호",h:178,w:68,s:44,tx:"주말 스트릿 코디",it:[2,4,7]},
+{u:"하린",h:170,w:58,s:40,tx:"과제 제출하러 가는 날",it:[3,6]},
+{u:"도윤",h:172,w:60,s:41,tx:"깔끔한 면접룩",it:[1,5,8]}];
+var CN={top:"상의",bottom:"하의",outer:"아우터"};
+var S={tab:"home",like:{},taste:{},body:{h:170,w:60,s:40},scanned:false,wear:{top:2,bottom:4,outer:null},cart:[],pts:1200,sim:false,lbf:false,scan:false};
+var $=function(id){return document.getElementById(id)};
+var won=function(n){return n.toLocaleString("ko-KR")+"원"};
+var get=function(id){return P.find(function(p){return p.id==id})};
+function toast(m){var t=$("toast");t.textContent=m;t.className="toast on";clearTimeout(toast.k);toast.k=setTimeout(function(){t.className="toast"},1800)}
+function bump(p,v){p.t.forEach(function(k){S.taste[k]=(S.taste[k]||0)+v})}
+function score(p){return p.t.reduce(function(a,k){return a+(S.taste[k]||0)},0)}
+
+function avatar(b,w,sc){
+  var k=b.h/170*.92, sw=b.s*2.3, ww=sw*.72*(.75+(b.w-40)/90), hw=ww*1.08, sk="#f0cba8";
+  var top=get(w.top),bot=get(w.bottom),out=get(w.outer);
+  var s='<svg viewBox="0 0 200 340" width="'+(sc||200)+'" height="'+(sc?sc*1.7:340)+'"><g transform="translate(100 335) scale('+k.toFixed(3)+') translate(-100 -335)">';
+  s+='<rect x="92" y="58" width="16" height="22" fill="'+sk+'"/><circle cx="100" cy="40" r="22" fill="'+sk+'"/><path d="M78 38 Q80 14 100 14 Q122 14 122 38 Q112 26 100 26 Q88 26 78 38Z" fill="#2b2433"/>';
+  var lw=hw*.46;
+  s+='<rect x="'+(100-hw/2)+'" y="170" width="'+lw+'" height="160" rx="6" fill="'+(bot&&bot.id!=6?bot.col:sk)+'"/><rect x="'+(100+hw/2-lw)+'" y="170" width="'+lw+'" height="160" rx="6" fill="'+(bot&&bot.id!=6?bot.col:sk)+'"/>';
+  if(bot&&bot.id==6)s+='<path d="M'+(100-hw/2)+' 168 L'+(100+hw/2)+' 168 L'+(100+hw/2+14)+' 232 L'+(100-hw/2-14)+' 232Z" fill="'+bot.col+'"/>';
+  s+='<path d="M'+(100-sw/2)+' 78 L'+(100+sw/2)+' 78 L'+(100+ww/2)+' 172 L'+(100-ww/2)+' 172Z" fill="'+(top?top.col:"#ccd")+'"/>';
+  s+='<rect x="'+(100-sw/2-15)+'" y="80" width="15" height="88" rx="7" fill="'+(out?out.col:top?top.col:sk)+'"/><rect x="'+(100+sw/2)+'" y="80" width="15" height="88" rx="7" fill="'+(out?out.col:top?top.col:sk)+'"/>';
+  if(out)s+='<path d="M'+(100-sw/2-2)+' 78 L'+(100-4)+' 78 L'+(100-ww/2+2)+' 196 L'+(100-ww/2-10)+' 196Z M'+(100+sw/2+2)+' 78 L'+(100+4)+' 78 L'+(100+ww/2-2)+' 196 L'+(100+ww/2+10)+' 196Z" fill="'+out.col+'" opacity=".95"/>';
+  return s+'</g></svg>';
+}
+function thumb(p){return '<svg viewBox="0 0 60 60" width="64" height="64"><path d="'+(p.c=="bottom"?"M18 8h24l4 46H34l-4-26-4 26H14z":"M20 8l-14 8 6 12 6-3v28h24V25l6 3 6-12-14-8q-4 6-10 6t-10-6z")+'" fill="'+p.col+'" stroke="rgba(0,0,0,.12)"/></svg>'}
+function card(p){
+  return '<div class="p"><div class="ph" style="background:'+p.col+'33">'+thumb(p)+'<button class="heart '+(S.like[p.id]?"on":"")+'" data-like="'+p.id+'" aria-label="찜">'+(S.like[p.id]?"♥":"♡")+'</button></div><div class="pi"><small>'+p.b+'</small><div class="n">'+p.n+'</div><b>'+won(p.pr)+'</b><div class="tag">#'+p.t.join(" #")+'</div><div style="display:flex;gap:6px;margin-top:8px"><button class="btn ghost sm" data-fit="'+p.id+'">입어보기</button><button class="btn sm" data-add="'+p.id+'">담기</button></div></div></div>';
+}
+function home(){
+  var tops=Object.keys(S.taste).sort(function(a,b){return S.taste[b]-S.taste[a]}).slice(0,3);
+  var list=P.slice().sort(function(a,b){return score(b)-score(a)||a.id-b.id});
+  return '<div class="hero"><h1>입기 전에,<br>내 체형에 먼저 입혀보세요</h1><p>카메라 스캔 한 번이면 3D 아바타가 만들어져요.</p><button class="btn" data-go="fit">내 드레스룸 가기</button></div>'+
+  '<h2>'+(tops.length?"요즘 내 취향 TOP "+tops.length:"나만의 취향 피드")+'</h2><p class="sub">'+(tops.length?'#'+tops.join(" #")+' 위주로 정렬했어요':'상품을 찜하거나 입어보면 메인 화면이 내 취향으로 바뀌어요')+'</p><div class="grid">'+list.map(card).join("")+'</div>';
+}
+function fit(){
+  var b=S.body,w=S.wear;
+  var items=["top","bottom","outer"].map(function(c){
+    return '<h3 style="margin:14px 0 6px">'+CN[c]+'</h3><div class="chips">'+(c=="outer"?'<button class="chip '+(!w[c]?"on":"")+'" data-wear="outer:0">없음</button>':'')+P.filter(function(p){return p.c==c}).map(function(p){return '<button class="chip '+(w[c]==p.id?"on":"")+'" data-wear="'+c+':'+p.id+'">'+p.n+'</button>'}).join("")+'</div>'}).join("");
+  var tot=["top","bottom","outer"].reduce(function(a,c){return a+(w[c]?get(w[c]).pr:0)},0);
+  return '<h2>AI 3D 가상 드레스룸</h2><p class="sub">'+(S.scanned?"스캔한 체형으로 입혀보는 중이에요":"체형을 스캔하면 더 정확하게 보여드려요")+'</p>'+
+  '<div class="stage '+(S.scan?"scanning":"")+'"><div class="scan"></div>'+avatar(b,w)+'</div>'+
+  '<div class="card" style="margin-top:12px"><button class="btn" data-scan="1">'+(S.scan?"스캔 중...":"카메라로 체형 스캔하기")+'</button>'+
+  [["키","h",150,195,"cm"],["몸무게","w",38,100,"kg"],["어깨","s",32,52,"cm"]].map(function(r){return '<div class="rg"><span>'+r[0]+'</span><input type="range" min="'+r[2]+'" max="'+r[3]+'" value="'+b[r[1]]+'" data-body="'+r[1]+'"><b id="v'+r[1]+'">'+b[r[1]]+r[4]+'</b></div>'}).join("")+'</div>'+
+  '<div class="card">'+items+'<div class="sum" style="margin-top:14px"><span>선택한 코디</span><b>'+won(tot)+'</b></div><button class="btn" data-addlook="1">코디 전체 담기</button></div>';
+}
+function look(){
+  var b=S.body;
+  var L=LB.filter(function(x){return !S.lbf||(Math.abs(x.h-b.h)<=5&&Math.abs(x.w-b.w)<=6)});
+  return '<h2>룩북</h2><p class="sub">나와 체형이 비슷한 사람의 착장을 보고, 같은 코디로 구매하면 포인트가 적립돼요.</p>'+
+  '<div class="chips" style="margin-bottom:12px"><button class="chip '+(S.lbf?"on":"")+'" data-lbf="1">내 체형과 비슷한 유저만</button></div>'+
+  (L.length?L.map(function(x,i){var w={top:null,bottom:null,outer:null};x.it.forEach(function(id){w[get(id).c]=id});
+  var tot=x.it.reduce(function(a,id){return a+get(id).pr},0);
+  return '<div class="lb"><div class="lbh"><div class="av">'+x.u[0]+'</div><div style="flex:1"><b>'+x.u+'</b><div class="sub" style="margin:0">'+x.h+'cm · '+x.w+'kg</div></div><span class="pt">구매 시 +'+won(Math.round(tot*.05)).replace("원","P")+'</span></div><div class="lbs">'+avatar({h:x.h,w:x.w,s:x.s},w,110)+'</div><div style="padding:12px 14px"><div style="margin-bottom:8px">'+x.tx+'</div><div class="chips">'+x.it.map(function(id){return '<span class="chip">'+get(id).n+'</span>'}).join("")+'</div><button class="btn" style="margin-top:12px" data-buylook="'+LB.indexOf(x)+'">이 착장 담기 · '+won(tot)+'</button></div></div>'}).join(""):'<div class="empty">비슷한 체형의 룩북이 아직 없어요.<br>필터를 끄고 전체 룩북을 둘러보세요.</div>')+
+  '<div class="card"><h3>내 착장 올리기</h3><p class="sub" style="margin:4px 0 10px">착장 사진이나 숏폼을 올리고, 내 게시글로 구매가 생기면 포인트를 받아요.</p><button class="btn ghost" data-upload="1">착장 올리기</button></div>';
+}
+function cart(){
+  if(!S.cart.length)return '<h2>장바구니</h2><div class="empty">담은 상품이 없어요.<br>드레스룸에서 먼저 입어보세요.</div>';
+  var sub=S.cart.reduce(function(a,c){return a+get(c.id).pr},0), rw=S.cart.reduce(function(a,c){return a+(c.rw?Math.round(get(c.id).pr*.05):0)},0);
+  var use=S.sim?Math.min(S.pts,sub):0;
+  return '<h2>장바구니</h2><div class="card">'+S.cart.map(function(c,i){var p=get(c.id);return '<div class="row"><div class="sw" style="background:'+p.col+'55;display:flex;align-items:center;justify-content:center">'+thumb(p).replace('width="64" height="64"','width="34" height="34"')+'</div><div class="g"><div>'+p.n+'</div><small>'+won(p.pr)+(c.rw?' · 룩북 적립 대상':'')+'</small></div><button class="chip" data-rm="'+i+'">삭제</button></div>'}).join("")+'</div>'+
+  '<div class="card"><div class="sum"><span>상품 금액</span><span>'+won(sub)+'</span></div><div class="sum"><span>포인트 사용 (보유 '+S.pts.toLocaleString()+'P)</span><span>-'+won(use)+'</span></div><div class="chips" style="margin:6px 0 10px"><button class="chip '+(S.sim?"on":"")+'" data-usept="1">포인트 모두 사용</button></div><div class="sum"><b>결제 금액</b><b>'+won(sub-use)+'</b></div>'+(rw?'<div class="sub" style="margin:6px 0 0">결제 후 룩북 적립 '+rw.toLocaleString()+'P가 들어와요.</div>':'')+'<button class="btn" style="margin-top:12px" data-pay="1">'+won(sub-use)+' 결제하기</button></div>';
+}
+function my(){
+  var b=S.body, tops=Object.keys(S.taste).sort(function(a,b){return S.taste[b]-S.taste[a]}).slice(0,6);
+  return '<h2>MY</h2><div class="card"><p class="sub" style="margin:0">보유 포인트</p><div style="font-size:28px;font-weight:900">'+S.pts.toLocaleString()+' P</div></div>'+
+  '<div class="card"><h3>내 체형 데이터</h3><p class="sub" style="margin:6px 0 0">'+b.h+'cm · '+b.w+'kg · 어깨 '+b.s+'cm '+(S.scanned?"(스캔 완료)":"(직접 입력)")+'</p></div>'+
+  '<div class="card"><h3>내 스타일 키워드</h3><div class="chips" style="margin-top:8px">'+(tops.length?tops.map(function(k){return '<span class="chip on">#'+k+'</span>'}).join(""):'<span class="sub" style="margin:0">찜하거나 입어보면 키워드가 쌓여요.</span>')+'</div></div>'+
+  '<div class="card"><h3>찜한 상품</h3><div style="margin-top:8px" class="grid">'+(P.filter(function(p){return S.like[p.id]}).map(card).join("")||'<span class="sub">아직 찜한 상품이 없어요.</span>')+'</div></div>';
+}
+var T=[["home","홈","⌂"],["fit","드레스룸","◎"],["look","룩북","▦"],["cart","장바구니","▣"],["my","MY","●"]];
+function render(){
+  var st=$("main").scrollTop;
+  $("pt").textContent=S.pts.toLocaleString()+" P";
+  $("nav").innerHTML=T.map(function(t){return '<button class="'+(S.tab==t[0]?"on":"")+'" data-go="'+t[0]+'"><b>'+t[2]+'</b>'+t[1]+(t[0]=="cart"&&S.cart.length?'<span class="badge">'+S.cart.length+'</span>':'')+'</button>'}).join("");
+  $("main").innerHTML={home:home,fit:fit,look:look,cart:cart,my:my}[S.tab]();
+  $("main").scrollTop=st;
+}
+function go(t){S.tab=t;render();$("main").scrollTop=0}
+function add(id,rw){if(S.cart.some(function(c){return c.id==id}))return false;S.cart.push({id:id,rw:!!rw});return true}
+document.addEventListener("click",function(e){
+  var el=e.target.closest("[data-go],[data-like],[data-add],[data-fit],[data-wear],[data-scan],[data-addlook],[data-lbf],[data-buylook],[data-upload],[data-rm],[data-usept],[data-pay]");
+  if(!el)return;var d=el.dataset;
+  if(d.go)return go(d.go);
+  if(d.like){var p=get(d.like);S.like[p.id]=!S.like[p.id];bump(p,S.like[p.id]?2:-2);return render()}
+  if(d.add){var p2=get(d.add);bump(p2,1);toast(add(p2.id)?"장바구니에 담았어요":"이미 담은 상품이에요");return render()}
+  if(d.fit){var q=get(d.fit);S.wear[q.c]=q.id;bump(q,1);return go("fit")}
+  if(d.wear){var a=d.wear.split(":");S.wear[a[0]]=+a[1]||null;if(+a[1])bump(get(a[1]),1);return render()}
+  if(d.scan){if(S.scan)return;S.scan=true;render();setTimeout(function(){S.body={h:168+Math.round(Math.random()*8),w:54+Math.round(Math.random()*10),s:38+Math.round(Math.random()*4)};S.scan=false;S.scanned=true;toast("체형 스캔이 끝났어요");render()},1700);return}
+  if(d.addlook){var n=0;["top","bottom","outer"].forEach(function(c){if(S.wear[c]&&add(S.wear[c]))n++});toast(n?n+"개 상품을 담았어요":"담을 새 상품이 없어요");return render()}
+  if(d.lbf){S.lbf=!S.lbf;return render()}
+  if(d.buylook){LB[d.buylook].it.forEach(function(id){var ex=S.cart.find(function(c){return c.id==id});if(ex)ex.rw=true;else add(id,true)});toast("착장을 담았어요. 결제하면 포인트가 적립돼요");return render()}
+  if(d.upload)return toast("착장 업로드는 곧 열려요");
+  if(d.rm){S.cart.splice(+d.rm,1);return render()}
+  if(d.usept){S.sim=!S.sim;return render()}
+  if(d.pay){var sub=S.cart.reduce(function(a,c){return a+get(c.id).pr},0),rw=S.cart.reduce(function(a,c){return a+(c.rw?Math.round(get(c.id).pr*.05):0)},0),use=S.sim?Math.min(S.pts,sub):0;S.pts=S.pts-use+rw;S.cart=[];S.sim=false;toast("결제 완료"+(rw?" · "+rw.toLocaleString()+"P 적립":""));return render()}
+});
+document.addEventListener("input",function(e){var k=e.target.dataset.body;if(!k)return;S.body[k]=+e.target.value;S.scanned=false;
+  $("v"+k).textContent=e.target.value+(k=="w"?"kg":"cm");document.querySelector(".stage").innerHTML='<div class="scan"></div>'+avatar(S.body,S.wear)});
+render();
+</script>
+</body>
+</html>
